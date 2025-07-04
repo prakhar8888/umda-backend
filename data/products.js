@@ -1,34 +1,37 @@
-// 📦 backend/data/products.js
+const express = require("express");
+const router = express.Router();
 
+// 🧪 Dummy products
 const products = [
   {
-    name: "Handblock Cotton Kurta",
-    price: 2299,
-    image: "https://anokhi.com/media/catalog/product/cache/1/image/600x/hbd3kth3jy01-03.jpg",
-    category: "Kurta",
-    description: "Beautiful handcrafted cotton kurta with ethnic block prints.",
+    _id: "1",
+    name: "Red Kurti",
+    image: "https://i.ibb.co/tCM1mJn/kurti-red.jpg",
+    price: 1299,
+    category: "ethnic",
+    description: "Beautiful red kurti with fine embroidery"
   },
   {
-    name: "Chanderi Printed Saree",
-    price: 4999,
-    image: "https://anokhi.com/media/catalog/product/cache/1/image/600x/sar7blrlur16-03.jpg",
-    category: "Saree",
-    description: "Elegant Chanderi saree with vibrant hand prints and soft texture.",
+    _id: "2",
+    name: "Blue Saree",
+    image: "https://i.ibb.co/W3yx5kT/saree-blue.jpg",
+    price: 2199,
+    category: "ethnic",
+    description: "Elegant blue silk saree perfect for weddings"
   },
   {
-    name: "Ajrakh Print Dupatta",
-    price: 1499,
-    image: "https://anokhi.com/media/catalog/product/cache/1/image/600x/dup1dabu2bg20-03.jpg",
-    category: "Dupatta",
-    description: "Ajrakh block-printed dupatta in earthy tones and organic dyes.",
-  },
-  {
-    name: "Flared Ethnic Skirt",
-    price: 1999,
-    image: "https://anokhi.com/media/catalog/product/cache/1/image/600x/sk1bmrb8rp27-03.jpg",
-    category: "Skirt",
-    description: "Flowy flared skirt with traditional Rajasthani motifs.",
-  },
+    _id: "3",
+    name: "Golden Lehenga",
+    image: "https://i.ibb.co/8cM3Q3D/lehenga-golden.jpg",
+    price: 5999,
+    category: "ethnic",
+    description: "Heavy golden lehenga with zari work"
+  }
 ];
 
-module.exports = products;
+// 🧠 GET all dummy products
+router.get("/", (req, res) => {
+  res.json(products);
+});
+
+module.exports = router;
