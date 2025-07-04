@@ -2,15 +2,11 @@ require('dotenv').config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const dotenv = require("dotenv");
 
 // ✅ Import your routes
 const productRoutes = require("./routes/productRoutes");
 const orderRoutes = require("./routes/orderRoutes");
-const paymentRoutes = require("./routes/paymentRoutes"); // 🆕 NEW
-
-// 🌱 Load environment variables
-dotenv.config();
+const paymentRoutes = require("./routes/paymentRoutes");
 
 // 🎯 Initialize express app
 const app = express();
@@ -20,22 +16,18 @@ app.use(cors());
 app.use(express.json());
 
 // 🔁 API Routes
-app.use("/api/products", productRoutes);  // ✅ Product Routes
-app.use("/api/orders", orderRoutes);      // ✅ Order Routes
-app.use("/api/payment", paymentRoutes);   // 🆕 Razorpay Payment Route
+app.use("/api/products", productRoutes);
+app.use("/api/orders", orderRoutes);
+app.use("/api/payment", paymentRoutes);
 
 // 🌐 MongoDB Connection
 mongoose
-  .connect(process.env.MONGO_URI || "mongodb://127.0.0.1:27017/umda-ethnic", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() =>
-    console.log("✅ MongoDB Connected:", process.env.MONGO_URI || "localhost")
-  )
-  .catch((err) =>
-    console.error("❌ MongoDB Connection Failed:", err.message)
-  );
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("✅ MongoDB Connected"))
+  .catch((err) => {
+    console.error("❌ MongoDB Connection Failed:", err.message);
+    process.exit(1); // Optional: stop server if DB fails
+  });
 
 // 🚀 Start Express Server
 const PORT = process.env.PORT || 5000;
