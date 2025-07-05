@@ -2,40 +2,41 @@
 
 const Product = require("../models/productModel");
 
-// 🧠 GET all products (admin & client view)
+// 🔍 GET all products
 const getAllProducts = async (req, res) => {
   try {
     const keyword = req.query.keyword
       ? { name: { $regex: req.query.keyword, $options: "i" } }
       : {};
 
-    const products = await Product.find(keyword).sort({ createdAt: -1 });
-    res.status(200).json(products);
+    const products = await Product.find(keyword);
+    res.json(products);
   } catch (err) {
-    console.error("❌ Error fetching products:", err.message);
-    res.status(500).json({
-      message: "Failed to fetch products",
-      error: err.message,
-    });
+    res.status(500).json({ message: "Failed to fetch products" });
   }
 };
 
-// 🆕 POST new product
+// 🆕 CREATE a new product
 const createProduct = async (req, res) => {
   try {
-    const newProduct = new Product(req.body);
+    const { name, image, price, category, description } = req.body;
+
+    const newProduct = new Product({
+      name,
+      image,
+      price,
+      category,
+      description,
+    });
+
     const saved = await newProduct.save();
     res.status(201).json(saved);
   } catch (err) {
-    console.error("❌ Error adding product:", err.message);
-    res.status(500).json({
-      message: "Failed to add product",
-      error: err.message,
-    });
+    res.status(500).json({ message: "Failed to add product", error: err.message });
   }
 };
 
-// 🖊️ UPDATE product
+// ✏️ UPDATE product by ID
 const updateProduct = async (req, res) => {
   try {
     const updated = await Product.findByIdAndUpdate(req.params.id, req.body, {
@@ -43,32 +44,20 @@ const updateProduct = async (req, res) => {
     });
     res.json(updated);
   } catch (err) {
-    console.error("❌ Error updating product:", err.message);
-    res.status(500).json({
-      message: "Failed to update product",
-      error: err.message,
-    });
+    res.status(500).json({ message: "Failed to update product" });
   }
 };
 
-// 🗑️ DELETE product by ID
+// ❌ DELETE product by ID
 const deleteProduct = async (req, res) => {
   try {
-    const deleted = await Product.findByIdAndDelete(req.params.id);
-    if (!deleted) {
-      return res.status(404).json({ message: "Product not found" });
-    }
-    res.status(200).json({ message: "✅ Product deleted successfully" });
+    await Product.findByIdAndDelete(req.params.id);
+    res.json({ message: "Product deleted" });
   } catch (err) {
-    console.error("❌ Error deleting product:", err.message);
-    res.status(500).json({
-      message: "Delete failed",
-      error: err.message,
-    });
+    res.status(500).json({ message: "Failed to delete product" });
   }
 };
 
-// 🎯 Export all controllers
 module.exports = {
   getAllProducts,
   createProduct,

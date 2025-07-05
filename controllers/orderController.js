@@ -1,6 +1,8 @@
+// 📄 backend/controllers/orderController.js
+
 const Order = require("../models/orderModel");
 
-// POST /api/orders
+// 🧾 POST /api/orders - Place a new order
 const createOrder = async (req, res) => {
   try {
     const { items, totalAmount, customerName, email, phone, address } = req.body;
