@@ -1,26 +1,35 @@
-require('dotenv').config();
+// ✅ Load environment variables from .env
+require("dotenv").config();
+
+// ✅ Import packages
 const express = require("express");
 const cors = require("cors");
+const connectDB = require("./config/db");
 
-// ✅ Import your routes
-const productRoutes = require("./routes/productRoutes");
-const orderRoutes = require("./routes/orderRoutes");
-const paymentRoutes = require("./routes/paymentRoutes"); // Razorpay Payment Route
-
-// 🎯 Initialize express app
+// ✅ Initialize express app
 const app = express();
+
+// ✅ Connect to MongoDB
+connectDB();
 
 // 🛡️ Middleware
 app.use(cors());
-app.use(express.json());
+app.use(express.json()); // Parse incoming JSON requests
+
+// 📦 Import Routes
+const productRoutes = require("./routes/productRoutes");
+const orderRoutes = require("./routes/orderRoutes");
+const paymentRoutes = require("./routes/paymentRoutes");
 
 // 🔁 API Routes
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/payment", paymentRoutes);
 
-// ⚠️ TEMPORARILY SKIP MONGODB
-console.log("⚠️ MongoDB temporarily disabled for demo");
+// 🧪 Root route (for testing backend is live)
+app.get("/", (req, res) => {
+  res.send("🚀 UMDA backend is running");
+});
 
 // 🚀 Start Express Server
 const PORT = process.env.PORT || 5000;
