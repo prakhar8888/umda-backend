@@ -9,8 +9,14 @@ const productSchema = new mongoose.Schema(
       required: [true, "Product name is required"],
     },
     image: {
-      type: String,
-      required: [true, "Product image URL is required"],
+      public_id: {
+        type: String,
+        required: [true, "Image public_id is required"],
+      },
+      url: {
+        type: String,
+        required: [true, "Image URL is required"],
+      },
     },
     price: {
       type: Number,
@@ -18,7 +24,7 @@ const productSchema = new mongoose.Schema(
     },
     category: {
       type: String,
-      default: "ethnic", // Helps with filtering
+      default: "ethnic",
     },
     description: {
       type: String,
