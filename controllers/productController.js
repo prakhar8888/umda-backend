@@ -1,12 +1,12 @@
-// ✅ CREATE Product (accepts image URL from frontend)
+const Product = require("../models/productModel");
+
+// ✅ CREATE Product using raw JSON
 const createProduct = async (req, res) => {
   try {
     const { name, price, category, description, image } = req.body;
 
     if (!name || !price || !category || !description || !image) {
-      return res
-        .status(400)
-        .json({ error: "All fields including image URL are required." });
+      return res.status(400).json({ error: "All fields including image URL are required." });
     }
 
     const newProduct = new Product({
@@ -15,7 +15,7 @@ const createProduct = async (req, res) => {
       category,
       description,
       image: {
-        public_id: "manual-upload", // Static public_id since not from Cloudinary
+        public_id: "url-upload",
         url: image,
       },
     });
