@@ -1,5 +1,3 @@
-// 📄 backend/models/productModel.js
-
 const mongoose = require("mongoose");
 
 const productSchema = new mongoose.Schema(
@@ -9,14 +7,8 @@ const productSchema = new mongoose.Schema(
       required: [true, "Product name is required"],
     },
     image: {
-      public_id: {
-        type: String,
-        required: [true, "Image public_id is required"],
-      },
-      url: {
-        type: String,
-        required: [true, "Image URL is required"],
-      },
+      type: String, // 💥 Changed from object to simple string (URL)
+      required: [true, "Image URL is required"],
     },
     price: {
       type: Number,

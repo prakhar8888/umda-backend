@@ -9,15 +9,11 @@ const {
   deleteProduct,
 } = require("../controllers/productController");
 
-const multer = require("multer");
-const storage = multer.memoryStorage();
-const upload = multer({ storage });
-
 // 🔍 GET /api/products?keyword=kurta
 router.get("/", getAllProducts);
 
-// 🆕 POST /api/products - Add new product with image (form-data)
-router.post("/", upload.single("image"), createProduct);
+// 🆕 POST /api/products - Add new product via JSON body (image as URL)
+router.post("/", createProduct);
 
 // ✏️ PUT /api/products/:id - Update product
 router.put("/:id", updateProduct);
