@@ -7,10 +7,10 @@ require("dotenv").config();
 const connectDB = require("./config/db");
 connectDB(); // 🚀 Initiate DB connection
 
-// 🛠️ Import the Express App
+// 🛠️ Import the Express App (your routes & middlewares should be in app.js)
 const app = require("./app");
 
-// 🌍 Define Port
+// 🌍 Define Port from .env or default to 5000
 const PORT = process.env.PORT || 5000;
 
 // 🚀 Start Express Server

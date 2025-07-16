@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+
 const {
   getAllProducts,
   createProduct,
@@ -7,10 +8,16 @@ const {
   deleteProduct,
 } = require("../controllers/productController");
 
-// ✅ Real Controller Routes
+// ✅ GET all products
 router.get("/", getAllProducts);
+
+// ✅ POST new product
 router.post("/", createProduct);
+
+// ✅ PUT update product by ID
 router.put("/:id", updateProduct);
+
+// ✅ DELETE product by ID
 router.delete("/:id", deleteProduct);
 
 module.exports = router;
