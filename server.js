@@ -1,19 +1,19 @@
 // ✅ server.js
 
-// 🔐 Load environment variables first
 require("dotenv").config();
 
 // 🔗 Connect to MongoDB
 const connectDB = require("./config/db");
 connectDB(); // 🚀 Initiate DB connection
 
-// 🛠️ Import the Express App (your routes & middlewares should be in app.js)
+// 🛠️ Import the Express App
 const app = require("./app");
 
-// 🌍 Define Port from .env or default to 5000
+// 🌍 Define Port and Host for Render Deployment
 const PORT = process.env.PORT || 5000;
+const HOST = "0.0.0.0"; // ✅ Important for Render deployment
 
 // 🚀 Start Express Server
-app.listen(PORT, () => {
-  console.log(`✅ Server running on http://localhost:${PORT} 🚀`);
+app.listen(PORT, HOST, () => {
+  console.log(`✅ Server running on port ${PORT} 🚀`);
 });

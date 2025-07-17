@@ -1,93 +1,88 @@
+// 📦 backend/controllers/productController.js
+
 const Product = require("../models/productModel");
 
-// ✅ CREATE Product with correct image handling
+// ✅ CREATE a product
 const createProduct = async (req, res) => {
   try {
-    const { name, price, category, description, image } = req.body;
+    const { name, price, category, image, description } = req.body;
 
-    // ✅ Basic validation
-    if (!name || !price || !category || !description || !image) {
-      return res.status(400).json({
-        error: "All fields including image URL are required.",
-      });
+    console.log("📦 Incoming product data:", req.body);
+
+    if (!name || !price || !category || !image || !description) {
+      return res.status(400).json({ message: "All fields are required." });
     }
 
-    // ✅ Create new Product instance
-    const newProduct = new Product({
+    const product = new Product({
       name,
       price,
       category,
+      image,
       description,
-      image, // ✅ Correct - as string not object
     });
 
-    // ✅ Save to DB
-    const savedProduct = await newProduct.save();
+    const savedProduct = await product.save();
+    res.status(201).json(savedProduct);
 
-    // ✅ Success Response
-    res.status(201).json({
-      message: "✅ Product created successfully",
-      product: savedProduct,
-    });
-  } catch (err) {
-    console.error("❌ Error in createProduct:", err);
-    res.status(500).json({ error: "Product creation failed." });
+  } catch (error) {
+    console.error("❌ Error in createProduct:", error.message);
+    res.status(500).json({ message: "Server error. Failed to create product." });
   }
 };
 
-// ✅ GET all Products
+// ✅ GET all products
 const getAllProducts = async (req, res) => {
   try {
-    const products = await Product.find();
+    const products = await Product.find({});
     res.json(products);
-  } catch (err) {
-    console.error("❌ Error in getAllProducts:", err);
-    res.status(500).json({ error: "Failed to fetch products." });
+  } catch (error) {
+    console.error("❌ Error in getAllProducts:", error.message);
+    res.status(500).json({ message: "Server error." });
   }
 };
 
-// ✅ UPDATE Product by ID
+// ✅ GET single product by ID
+const getProductById = async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found." });
+    }
+    res.json(product);
+  } catch (error) {
+    console.error("❌ Error in getProductById:", error.message);
+    res.status(500).json({ message: "Server error." });
+  }
+};
+
+// ✅ UPDATE a product
 const updateProduct = async (req, res) => {
   try {
-    const updatedProduct = await Product.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
-
-    if (!updatedProduct) {
-      return res.status(404).json({ error: "Product not found." });
-    }
-
-    res.json({
-      message: "✅ Product updated successfully",
-      product: updatedProduct,
+    const updated = await Product.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
     });
-  } catch (err) {
-    console.error("❌ Error in updateProduct:", err);
-    res.status(500).json({ error: "Product update failed." });
+    res.json(updated);
+  } catch (error) {
+    console.error("❌ Error in updateProduct:", error.message);
+    res.status(500).json({ message: "Server error. Failed to update." });
   }
 };
 
-// ✅ DELETE Product by ID
+// ✅ DELETE a product
 const deleteProduct = async (req, res) => {
   try {
-    const deletedProduct = await Product.findByIdAndDelete(req.params.id);
-
-    if (!deletedProduct) {
-      return res.status(404).json({ error: "Product not found." });
-    }
-
-    res.json({ message: "✅ Product deleted successfully" });
-  } catch (err) {
-    console.error("❌ Error in deleteProduct:", err);
-    res.status(500).json({ error: "Product deletion failed." });
+    await Product.findByIdAndDelete(req.params.id);
+    res.json({ message: "✅ Product deleted" });
+  } catch (error) {
+    console.error("❌ Error in deleteProduct:", error.message);
+    res.status(500).json({ message: "Server error. Failed to delete." });
   }
 };
 
 module.exports = {
   createProduct,
   getAllProducts,
+  getProductById, // ✅ NOW ADDED
   updateProduct,
   deleteProduct,
 };

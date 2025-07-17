@@ -1,44 +1,41 @@
-// ✅ app.js
-
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
-const path = require("path");
 require("dotenv").config();
 
 const app = express();
 
 // ✅ Middleware Config
+app.use(
+  cors({
+    origin: ["http://localhost:3000", "http://localhost:3001"], // ✅ ALLOW BOTH PORTS
+    credentials: true,
+  })
+);
 
-app.use(cors({
-  origin: process.env.CLIENT_URL || "http://localhost:3000",
-  credentials: true, // for cookies or auth headers
-}));
+app.use(express.json()); // parse application/json
+app.use(express.urlencoded({ extended: true })); // parse form-urlencoded
 
-// ✅ Body Parsing Middlewares
-app.use(express.json()); // handles application/json
-app.use(express.urlencoded({ extended: true })); // handles form-data/text
-
-// ✅ Morgan Logger (only in dev)
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
-// ✅ Routes
+// ✅ Routes Import
 const productRoutes = require("./routes/productRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
 
-app.use("/api/products", productRoutes);
-app.use("/api/orders", orderRoutes);
-app.use("/api/payment", paymentRoutes);
+// ✅ Route Mounts
+app.use("/api/products", productRoutes);   // 📦 Products
+app.use("/api/orders", orderRoutes);       // 🛒 Orders
+app.use("/api/payment", paymentRoutes);    // 💳 Payments
 
 // ✅ Root Test Route
 app.get("/", (req, res) => {
   res.send("🚀 UMDA backend is running.");
 });
 
-// ✅ 404 Handler (Optional but clean)
+// ✅ 404 Handler
 app.use((req, res) => {
   res.status(404).json({ error: "🔍 Route not found" });
 });
